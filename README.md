@@ -61,20 +61,6 @@ Clique sur "🗑️ Réinitialiser" → Confirmation → Tous les sites mémoris
 🔒 Ne force pas le plein écran : cela désactive le Letterboxing (protection contre le pistage).
 📋 Première utilisation : Chrome demandera confirmation pour le protocole tor-open:// → coche "Toujours autoriser".
 
-
-🤝 Contribution
-Les contributions sont les bienvenues ! Ouvrez une Issue ou soumettez une Pull Request.
-
-Étape 3 : Configuration
-Dans tor-launcher.bat, remplace NOM_UTILISATEUR par ton nom de session Windows :
-batch
-Copier
-
-set "TORRC_DIR=C:\Users\TON_NOM_UTILISATEUR\Desktop\Tor Browser\Browser\TorBrowser\Data\Tor"
-
-
-
-
 🎬 Aperçu
 Interface
 Sur n'importe quelle page web :
