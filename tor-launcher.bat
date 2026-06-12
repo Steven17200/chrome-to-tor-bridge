@@ -6,4 +6,4 @@ set "URL=%~1"
 set "URL=%URL:tor-open://=%"
 
 :: 3. Lance Tor Browser en ajoutant proprement UN SEUL https:// au début
-start "" "C:\Users\BE QUIET\Desktop\Tor Browser\Browser\firefox.exe" "https://%URL%"
+start "" "C:\Users\NOM_UTILISATEUR\Desktop\Tor Browser\Browser\firefox.exe" "https://%URL%"
