@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Auto-Ouvrir dans Tor Browser (Chrome) - Dynamique
 // @namespace    http://tampermonkey.net/
-// @version      2.3
-// @description  Bascule vers Tor automatiquement ou propose l'ajout via un bouton flottant en bas à droite avec reset
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
+// @version      2.4
+// @description  Bascule vers Tor automatiquement ou propose l'ajout via un bouton flottant avec sélection de pays et reset
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=torproject.org
 // @author       Stéphane
 // @match        *://*/*
 // @grant        GM_getValue
@@ -14,36 +14,40 @@
 (function() {
     'use strict';
 
-    // 1. Tes sites de base
-    const DEFAULT_SITES = [
-        "onion.to",
-        "ahmia.fi",
-        "duckduckgo.com"
-    ];
-
-    // 2. Chargement de la liste dynamique
+    // Sites de base
+    const DEFAULT_SITES = ["onion.to", "ahmia.fi", "duckduckgo.com"];
     let torSites = GM_getValue("mes_sites_tor", DEFAULT_SITES);
+    let defaultCountry = GM_getValue("default_country", "auto");
     const currentHostname = window.location.hostname;
 
-    // Fonction de vérification
+    // Liste des pays disponibles
+    const COUNTRIES = {
+        'auto': { name: 'Auto (circuit aléatoire)', emoji: '🌍' },
+        'de': { name: 'Allemagne', emoji: '🇩🇪' },
+        'be': { name: 'Belgique', emoji: '🇧🇪' },
+        'us': { name: 'USA', emoji: '🇺🇸' },
+        'ca': { name: 'Canada', emoji: '🇨🇦' },
+        'fr': { name: 'France', emoji: '🇫🇷' },
+        'nl': { name: 'Pays-Bas', emoji: '🇳🇱' },
+        'ch': { name: 'Suisse', emoji: '🇨🇭' },
+        'se': { name: 'Suède', emoji: '🇸🇪' }
+    };
+
     function shouldRedirect(hostname) {
         return torSites.some(site => hostname === site || hostname.endsWith('.' + site));
     }
 
-    // NOUVEAU : Fonction pour réinitialiser
     function resetSites() {
         GM_setValue("mes_sites_tor", DEFAULT_SITES);
         window.location.reload();
     }
 
-    // =========================================================================
-    // CAS 1 : LE SITE EST DANS LA LISTE -> REDIRECTION IMMÉDIATE
-    // =========================================================================
+    // CAS 1 : Redirection immédiate
     if (shouldRedirect(currentHostname)) {
         window.stop();
-
         const cleanUrl = window.location.href.replace(/^https?:\/\//, '');
-        window.location.href = `tor-open://${cleanUrl}`;
+        const countryParam = defaultCountry !== "auto" ? "&country=" + defaultCountry : "";
+        window.location.href = 'tor-open://' + cleanUrl + countryParam;
 
         document.documentElement.innerHTML = `
             <div style="font-family: Arial, sans-serif; text-align: center; margin-top: 100px; color: #2d3748;">
@@ -52,17 +56,11 @@
                 <p style="color: #718096;"><i>Cet onglet se fermera automatiquement dans 10 secondes.</i></p>
             </div>
         `;
-
         setTimeout(() => { window.close(); }, 10000);
     }
-
-    // =========================================================================
-    // CAS 2 : LE SITE N'EST PAS DANS LA LISTE -> AFFICHAGE DES BOUTONS
-    // =========================================================================
+    // CAS 2 : Boutons avec menu pays
     else {
         window.addEventListener('DOMContentLoaded', () => {
-
-            // Conteneur pour les boutons
             const container = document.createElement('div');
             container.style.position = 'fixed';
             container.style.bottom = '20px';
@@ -73,7 +71,35 @@
             container.style.gap = '5px';
             container.style.alignItems = 'flex-end';
 
-            // Bouton principal (inchangé)
+            // Menu pays
+            const countrySelect = document.createElement('select');
+            Object.assign(countrySelect.style, {
+                padding: '6px 10px',
+                backgroundColor: '#59316B',
+                color: '#FFFFFF',
+                border: '1px solid #4a285a',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '12px',
+                width: '100%',
+                opacity: '0.9'
+            });
+
+            for (const [code, country] of Object.entries(COUNTRIES)) {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = country.emoji + ' ' + country.name;
+                option.style.color = '#FFFFFF';
+                if (code === defaultCountry) option.selected = true;
+                countrySelect.appendChild(option);
+            }
+
+            countrySelect.addEventListener('change', () => {
+                defaultCountry = countrySelect.value;
+                GM_setValue("default_country", defaultCountry);
+            });
+
+            // Bouton Envoyer vers Tor
             const torBtn = document.createElement('button');
             torBtn.innerHTML = '🔮 Envoyer vers Tor';
             Object.assign(torBtn.style, {
@@ -87,11 +113,11 @@
                 fontSize: '13px',
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                opacity: '0.4',
+                opacity: '0.9',
                 transition: 'opacity 0.2s, transform 0.1s'
             });
 
-            // NOUVEAU : Bouton RESET
+            // Bouton Reset
             const resetBtn = document.createElement('button');
             resetBtn.innerHTML = '🗑️ Réinitialiser';
             Object.assign(resetBtn.style, {
@@ -105,22 +131,21 @@
                 fontSize: '11px',
                 fontWeight: 'bold',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                opacity: '0.4',
+                opacity: '0.9',
                 transition: 'opacity 0.2s, transform 0.1s'
             });
 
-            // Effets visuels (identiques)
-            torBtn.onmouseover = () => torBtn.style.opacity = '1';
-            torBtn.onmouseout = () => torBtn.style.opacity = '0.4';
-            torBtn.onmousedown = () => torBtn.style.transform = 'scale(0.95)';
-            torBtn.onmouseup = () => torBtn.style.transform = 'scale(1)';
+            // Effets visuels
+            [torBtn, resetBtn, countrySelect].forEach(el => {
+                el.onmouseover = () => el.style.opacity = '1';
+                el.onmouseout = () => el.style.opacity = '0.9';
+            });
+            [torBtn, resetBtn].forEach(el => {
+                el.onmousedown = () => el.style.transform = 'scale(0.95)';
+                el.onmouseup = () => el.style.transform = 'scale(1)';
+            });
 
-            resetBtn.onmouseover = () => resetBtn.style.opacity = '1';
-            resetBtn.onmouseout = () => resetBtn.style.opacity = '0.4';
-            resetBtn.onmousedown = () => resetBtn.style.transform = 'scale(0.95)';
-            resetBtn.onmouseup = () => resetBtn.style.transform = 'scale(1)';
-
-            // Action du bouton principal (inchangée)
+            // Actions
             torBtn.onclick = () => {
                 if (!torSites.includes(currentHostname)) {
                     torSites.push(currentHostname);
@@ -131,14 +156,13 @@
                 }
             };
 
-            // NOUVEAU : Action du bouton RESET
             resetBtn.onclick = () => {
                 if (confirm('⚠️ Réinitialiser TOUS les sites mémorisés ?')) {
                     resetSites();
                 }
             };
 
-            // Ajout des boutons
+            container.appendChild(countrySelect);
             container.appendChild(torBtn);
             container.appendChild(resetBtn);
             document.body.appendChild(container);
