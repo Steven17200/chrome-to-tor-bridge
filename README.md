@@ -38,12 +38,11 @@
 ## 📥 Installation
 ### Étape 1 : Créer le dossier : C:\TorBridge\
 ```bash
-  tor-launcher.bat ,  Modifier ligne 22 , remplace NOM_UTILISATEUR par ton nom de session Windows
+ Deplacer :  tor-launcher.bat ,  Modifier ligne 22 , remplace NOM_UTILISATEUR par ton nom de session Windows
 set "TORRC_DIR=C:\Users\TON_NOM_UTILISATEUR\Desktop\Tor Browser\Browser\TorBrowser\Data\Tor"
-```bash
-           tor-bridge.reg
+        ⚠️   tor-bridge.reg
       Double-clic
-      Fusionner dans le registre
+      Fusionner dans le registre ⚠️ 
 
 🎬 Aperçu
 Interface
