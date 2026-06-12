@@ -37,35 +37,43 @@
 
 ## 📥 Installation
 Étape 2 : Fichiers à placer
-Étape 2 : Fichiers à placer
-
-
-  
-    
-      Fichier
-      Destination
-      Action
-    
-  
-  
     
       tor-launcher.bat
       C:\TorBridge\
       Modifier ligne 22
     
-    
       tor-bridge.reg
       Double-clic
       Fusionner dans le registre
+
     
-    
-      auto-open-tor.user.js
-      Tampermonkey
-      Créer un nouveau script
-    
-  
+Étape 3 : Configuration
+Dans tor-launcher.bat, remplace NOM_UTILISATEUR par ton nom de session Windows :
+batch
+Copier
+
+set "TORRC_DIR=C:\Users\TON_NOM_UTILISATEUR\Desktop\Tor Browser\Browser\TorBrowser\Data\Tor"
+
+🎬 Aperçu
+Interface
+Sur n'importe quelle page web :
+
+Sélectionne un pays dans le menu déroulant
+Clique sur "🔮 Envoyer vers Tor"
+Le site s'ouvre dans Tor Browser avec le circuit du pays choisi
+Pour réinitialiser :
+
+Clique sur "🗑️ Réinitialiser" → Confirmation → Tous les sites mémorisés sont effacés
+
+⚠️ Notes de sécurité
+
+⚠️ Tor Browser réinitialise son cache à chaque fermeture pour protéger ton anonymat.
+🔒 Ne force pas le plein écran : cela désactive le Letterboxing (protection contre le pistage).
+📋 Première utilisation : Chrome demandera confirmation pour le protocole tor-open:// → coche "Toujours autoriser".
 
 
+🤝 Contribution
+Les contributions sont les bienvenues ! Ouvrez une Issue ou soumettez une Pull Request.
 
 Étape 3 : Configuration
 Dans tor-launcher.bat, remplace NOM_UTILISATEUR par ton nom de session Windows :
@@ -98,45 +106,6 @@ Clique sur "🗑️ Réinitialiser" → Confirmation → Tous les sites mémoris
 🤝 Contribution
 Les contributions sont les bienvenues ! Ouvrez une Issue ou soumettez une Pull Request.
 
-📜 Licence
-MIT License © 2026 Stéphane Denizault
-</div>
-```
-Étape 3 : Configuration
-Dans tor-launcher.bat, remplace NOM_UTILISATEUR par ton nom de session Windows :
-batch
-Copier
-
-set "TORRC_DIR=C:\Users\TON_NOM_UTILISATEUR\Desktop\Tor Browser\Browser\TorBrowser\Data\Tor"
-
-
-
-
-🎬 Aperçu
-Interface
-Sur n'importe quelle page web :
-
-Sélectionne un pays dans le menu déroulant
-Clique sur "🔮 Envoyer vers Tor"
-Le site s'ouvre dans Tor Browser avec le circuit du pays choisi
-Pour réinitialiser :
-
-Clique sur "🗑️ Réinitialiser" → Confirmation → Tous les sites mémorisés sont effacés
-
-⚠️ Notes de sécurité
-
-⚠️ Tor Browser réinitialise son cache à chaque fermeture pour protéger ton anonymat.
-🔒 Ne force pas le plein écran : cela désactive le Letterboxing (protection contre le pistage).
-📋 Première utilisation : Chrome demandera confirmation pour le protocole tor-open:// → coche "Toujours autoriser".
-
-
-🤝 Contribution
-Les contributions sont les bienvenues ! Ouvrez une Issue ou soumettez une Pull Request.
-
-📜 Licence
-MIT License © 2026 Stéphane Denizault
-</div>
-```
 ### Étape 1 : Prérequis
 ```bash
 Créer le dossier : C:\TorBridge\
