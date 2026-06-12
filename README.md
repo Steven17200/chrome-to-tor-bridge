@@ -77,11 +77,3 @@ Clique sur "🗑️ Réinitialiser" → Confirmation → Tous les sites mémoris
 ⚠️ Tor Browser réinitialise son cache à chaque fermeture pour protéger ton anonymat.
 🔒 Ne force pas le plein écran : cela désactive le Letterboxing (protection contre le pistage).
 📋 Première utilisation : Chrome demandera confirmation pour le protocole tor-open:// → coche "Toujours autoriser".
-
-
-🤝 Contribution
-Les contributions sont les bienvenues ! Ouvrez une Issue ou soumettez une Pull Request.
-
-### Étape 1 : Prérequis
-```bash
-Créer le dossier : C:\TorBridge\
