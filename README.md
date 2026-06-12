@@ -37,16 +37,13 @@
 
 ## 📥 Installation
 Étape 2 : Fichiers à placer
-    
-      tor-launcher.bat
+      tor-launcher.bat ,  Modifier ligne 22
       C:\TorBridge\
-      Modifier ligne 22
-    
-      tor-bridge.reg
+    .
+           tor-bridge.reg
       Double-clic
       Fusionner dans le registre
 
-    
 Étape 3 : Configuration
 Dans tor-launcher.bat, remplace NOM_UTILISATEUR par ton nom de session Windows :
 batch
